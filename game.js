@@ -425,27 +425,34 @@ function setupMobileOptimizations() {
     }
     viewport.content = 'width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover';
     
-    // Adjust canvas container for mobile
-    const gameContainer = document.querySelector('.game-container');
-    gameContainer.style.width = '100vw';
-    gameContainer.style.height = 'calc(100vh - 120px)'; // Account for mobile controls
-    gameContainer.style.maxWidth = '100vw';
-    gameContainer.style.maxHeight = 'calc(100vh - 120px)';
+    // Adjust page layout for mobile controls
+    document.body.style.margin = '0';
+    document.body.style.padding = '0';
+    document.body.style.height = '100vh';
+    document.body.style.display = 'flex';
+    document.body.style.flexDirection = 'column';
     
-    // Scale canvas to fit mobile screen while maintaining aspect ratio
-    const scaleX = window.innerWidth / 800;
-    const scaleY = (window.innerHeight - 120) / 600; // Subtract mobile controls height
+    // Adjust canvas container for mobile - make room for controls
+    const gameContainer = document.querySelector('.game-container');
+    gameContainer.style.flex = '1';
+    gameContainer.style.display = 'flex';
+    gameContainer.style.justifyContent = 'center';
+    gameContainer.style.alignItems = 'center';
+    gameContainer.style.minHeight = '0';
+    
+    // Calculate available space for game (total height minus controls)
+    const availableHeight = window.innerHeight - 120; // 120px for controls
+    const availableWidth = window.innerWidth;
+    
+    // Scale canvas to fit available space while maintaining aspect ratio
+    const scaleX = availableWidth / 800;
+    const scaleY = availableHeight / 600;
     const scale = Math.min(scaleX, scaleY);
     
     canvas.style.width = `${800 * scale}px`;
     canvas.style.height = `${600 * scale}px`;
     canvas.style.imageRendering = 'pixelated';
     canvas.style.imageRendering = 'crisp-edges';
-    
-    // Center the canvas
-    gameContainer.style.display = 'flex';
-    gameContainer.style.justifyContent = 'center';
-    gameContainer.style.alignItems = 'center';
     
     // Hide controls info on mobile
     const controlsInfo = document.querySelector('.controls-info');
@@ -456,70 +463,53 @@ function setupMobileOptimizations() {
     // Create mobile controls
     createMobileControls();
     
-    // Force landscape orientation hint
-    const orientationHint = document.createElement('div');
-    orientationHint.id = 'orientation-hint';
-    orientationHint.innerHTML = '📱 ↻<br>Please rotate your device to landscape mode for the best experience!';
-    orientationHint.style.cssText = `
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(0, 0, 0, 0.9);
-        color: #FFD700;
-        font-family: 'Press Start 2P', monospace;
-        font-size: 14px;
-        text-align: center;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        z-index: 10000;
-        line-height: 1.5;
-    `;
-    
-    // Show/hide orientation hint based on orientation
-    function checkOrientation() {
-        if (window.innerHeight > window.innerWidth) {
-            document.body.appendChild(orientationHint);
-        } else {
-            if (orientationHint.parentNode) {
-                orientationHint.parentNode.removeChild(orientationHint);
-            }
-        }
-    }
-    
-    // Check orientation on load and resize
-    checkOrientation();
+    // Handle orientation changes
     window.addEventListener('orientationchange', () => {
-        setTimeout(checkOrientation, 100);
+        setTimeout(() => {
+            // Recalculate scaling on orientation change
+            const newAvailableHeight = window.innerHeight - 120;
+            const newAvailableWidth = window.innerWidth;
+            const newScaleX = newAvailableWidth / 800;
+            const newScaleY = newAvailableHeight / 600;
+            const newScale = Math.min(newScaleX, newScaleY);
+            
+            canvas.style.width = `${800 * newScale}px`;
+            canvas.style.height = `${600 * newScale}px`;
+        }, 100);
     });
-    window.addEventListener('resize', checkOrientation);
+    
+    window.addEventListener('resize', () => {
+        // Recalculate scaling on resize
+        const newAvailableHeight = window.innerHeight - 120;
+        const newAvailableWidth = window.innerWidth;
+        const newScaleX = newAvailableWidth / 800;
+        const newScaleY = newAvailableHeight / 600;
+        const newScale = Math.min(newScaleX, newScaleY);
+        
+        canvas.style.width = `${800 * newScale}px`;
+        canvas.style.height = `${600 * newScale}px`;
+    });
 }
 
 // Function to create mobile controls
 function createMobileControls() {
     if (!gameState.isMobile) return;
     
-    // Create mobile controls container
+    // Create mobile controls container - NOT fixed position
     const mobileControls = document.createElement('div');
     mobileControls.id = 'mobile-controls';
     mobileControls.style.cssText = `
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
         height: 120px;
-        background: rgba(0, 0, 0, 0.8);
+        background: rgba(0, 0, 0, 0.9);
         display: flex;
         justify-content: space-between;
         align-items: center;
         padding: 10px 20px;
-        z-index: 1000;
         user-select: none;
         -webkit-user-select: none;
         -webkit-touch-callout: none;
+        border-top: 2px solid #FFD700;
+        flex-shrink: 0;
     `;
     
     // Action buttons (left side)
@@ -527,7 +517,7 @@ function createMobileControls() {
     actionButtons.style.cssText = `
         display: flex;
         flex-direction: column;
-        gap: 10px;
+        gap: 8px;
     `;
     
     // Pick up/Drop button
@@ -535,18 +525,18 @@ function createMobileControls() {
     pickupButton.id = 'pickup-btn';
     pickupButton.innerHTML = 'PICKUP<br>DROP';
     pickupButton.style.cssText = `
-        width: 80px;
-        height: 45px;
+        width: 70px;
+        height: 40px;
         background-color: #DAA520;
         color: #000;
-        border: 3px solid #000;
+        border: 2px solid #000;
         font-family: 'Press Start 2P', monospace;
-        font-size: 8px;
+        font-size: 7px;
         font-weight: bold;
         text-align: center;
-        line-height: 1.2;
-        box-shadow: 3px 3px 0 #8B6914;
-        border-radius: 5px;
+        line-height: 1.1;
+        box-shadow: 2px 2px 0 #8B6914;
+        border-radius: 4px;
         cursor: pointer;
         touch-action: manipulation;
         -webkit-tap-highlight-color: transparent;
@@ -557,18 +547,18 @@ function createMobileControls() {
     pushButton.id = 'push-btn';
     pushButton.innerHTML = 'PUSH<br>PULL';
     pushButton.style.cssText = `
-        width: 80px;
-        height: 45px;
+        width: 70px;
+        height: 40px;
         background-color: #DAA520;
         color: #000;
-        border: 3px solid #000;
+        border: 2px solid #000;
         font-family: 'Press Start 2P', monospace;
-        font-size: 8px;
+        font-size: 7px;
         font-weight: bold;
         text-align: center;
-        line-height: 1.2;
-        box-shadow: 3px 3px 0 #8B6914;
-        border-radius: 5px;
+        line-height: 1.1;
+        box-shadow: 2px 2px 0 #8B6914;
+        border-radius: 4px;
         cursor: pointer;
         touch-action: manipulation;
         -webkit-tap-highlight-color: transparent;
@@ -578,8 +568,8 @@ function createMobileControls() {
     const dPad = document.createElement('div');
     dPad.style.cssText = `
         position: relative;
-        width: 120px;
-        height: 120px;
+        width: 100px;
+        height: 100px;
     `;
     
     // Left arrow
@@ -591,17 +581,17 @@ function createMobileControls() {
         left: 0;
         top: 50%;
         transform: translateY(-50%);
-        width: 40px;
-        height: 40px;
+        width: 35px;
+        height: 35px;
         background-color: #DAA520;
         color: #000;
-        border: 3px solid #000;
+        border: 2px solid #000;
         font-family: 'Press Start 2P', monospace;
-        font-size: 16px;
+        font-size: 14px;
         font-weight: bold;
         text-align: center;
-        box-shadow: 3px 3px 0 #8B6914;
-        border-radius: 5px;
+        box-shadow: 2px 2px 0 #8B6914;
+        border-radius: 4px;
         cursor: pointer;
         touch-action: manipulation;
         -webkit-tap-highlight-color: transparent;
@@ -616,17 +606,17 @@ function createMobileControls() {
         right: 0;
         top: 50%;
         transform: translateY(-50%);
-        width: 40px;
-        height: 40px;
+        width: 35px;
+        height: 35px;
         background-color: #DAA520;
         color: #000;
-        border: 3px solid #000;
+        border: 2px solid #000;
         font-family: 'Press Start 2P', monospace;
-        font-size: 16px;
+        font-size: 14px;
         font-weight: bold;
         text-align: center;
-        box-shadow: 3px 3px 0 #8B6914;
-        border-radius: 5px;
+        box-shadow: 2px 2px 0 #8B6914;
+        border-radius: 4px;
         cursor: pointer;
         touch-action: manipulation;
         -webkit-tap-highlight-color: transparent;
@@ -640,7 +630,7 @@ function createMobileControls() {
     mobileControls.appendChild(actionButtons);
     mobileControls.appendChild(dPad);
     
-    // Add to page
+    // Add to page as part of the layout (not fixed overlay)
     document.body.appendChild(mobileControls);
     
     // Add touch event handlers
@@ -654,7 +644,7 @@ function setupMobileTouchEvents() {
         button.addEventListener('touchstart', (e) => {
             e.preventDefault();
             button.style.backgroundColor = '#FFD700';
-            button.style.transform = 'translate(2px, 2px)';
+            button.style.transform = 'translate(1px, 1px)';
             button.style.boxShadow = '1px 1px 0 #8B6914';
         });
         
@@ -662,7 +652,7 @@ function setupMobileTouchEvents() {
             e.preventDefault();
             button.style.backgroundColor = '#DAA520';
             button.style.transform = 'translate(0, 0)';
-            button.style.boxShadow = '3px 3px 0 #8B6914';
+            button.style.boxShadow = '2px 2px 0 #8B6914';
         });
     }
     
@@ -671,6 +661,11 @@ function setupMobileTouchEvents() {
     const rightBtn = document.getElementById('right-btn');
     const pickupBtn = document.getElementById('pickup-btn');
     const pushBtn = document.getElementById('push-btn');
+    
+    if (!leftBtn || !rightBtn || !pickupBtn || !pushBtn) {
+        console.error('Mobile control buttons not found');
+        return;
+    }
     
     // Add visual effects to all buttons
     [leftBtn, rightBtn, pickupBtn, pushBtn].forEach(addButtonEffects);
@@ -726,7 +721,7 @@ function setupMobileTouchEvents() {
         }
     });
     
-    // Prevent scrolling on touch
+    // Prevent scrolling on touch for mobile controls
     document.addEventListener('touchmove', (e) => {
         if (gameState.isMobile && e.target.closest('#mobile-controls')) {
             e.preventDefault();
