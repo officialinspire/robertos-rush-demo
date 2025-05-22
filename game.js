@@ -432,7 +432,7 @@ function setupMobileOptimizations() {
     document.body.style.display = 'flex';
     document.body.style.flexDirection = 'column';
     
-    // Adjust canvas container for mobile - make room for controls
+    // Adjust canvas container for mobile - make room for controls (increased height)
     const gameContainer = document.querySelector('.game-container');
     gameContainer.style.flex = '1';
     gameContainer.style.display = 'flex';
@@ -440,8 +440,8 @@ function setupMobileOptimizations() {
     gameContainer.style.alignItems = 'center';
     gameContainer.style.minHeight = '0';
     
-    // Calculate available space for game (total height minus controls)
-    const availableHeight = window.innerHeight - 120; // 120px for controls
+    // Calculate available space for game (total height minus controls - increased to 140px)
+    const availableHeight = window.innerHeight - 140; // 140px for controls
     const availableWidth = window.innerWidth;
     
     // Scale canvas to fit available space while maintaining aspect ratio
@@ -467,7 +467,7 @@ function setupMobileOptimizations() {
     window.addEventListener('orientationchange', () => {
         setTimeout(() => {
             // Recalculate scaling on orientation change
-            const newAvailableHeight = window.innerHeight - 120;
+            const newAvailableHeight = window.innerHeight - 140; // Updated height
             const newAvailableWidth = window.innerWidth;
             const newScaleX = newAvailableWidth / 800;
             const newScaleY = newAvailableHeight / 600;
@@ -480,7 +480,7 @@ function setupMobileOptimizations() {
     
     window.addEventListener('resize', () => {
         // Recalculate scaling on resize
-        const newAvailableHeight = window.innerHeight - 120;
+        const newAvailableHeight = window.innerHeight - 140; // Updated height
         const newAvailableWidth = window.innerWidth;
         const newScaleX = newAvailableWidth / 800;
         const newScaleY = newAvailableHeight / 600;
@@ -495,16 +495,16 @@ function setupMobileOptimizations() {
 function createMobileControls() {
     if (!gameState.isMobile) return;
     
-    // Create mobile controls container - NOT fixed position
+    // Create mobile controls container - increased height for better spacing
     const mobileControls = document.createElement('div');
     mobileControls.id = 'mobile-controls';
     mobileControls.style.cssText = `
-        height: 120px;
+        height: 140px;
         background: rgba(0, 0, 0, 0.9);
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 10px 20px;
+        padding: 15px 30px;
         user-select: none;
         -webkit-user-select: none;
         -webkit-touch-callout: none;
@@ -512,111 +512,113 @@ function createMobileControls() {
         flex-shrink: 0;
     `;
     
-    // Action buttons (left side)
+    // Action buttons (left side) - increased spacing
     const actionButtons = document.createElement('div');
     actionButtons.style.cssText = `
         display: flex;
         flex-direction: column;
-        gap: 8px;
+        gap: 20px;
+        align-items: flex-start;
     `;
     
-    // Pick up/Drop button
+    // Pick up/Drop button - increased size
     const pickupButton = document.createElement('button');
     pickupButton.id = 'pickup-btn';
     pickupButton.innerHTML = 'PICKUP<br>DROP';
     pickupButton.style.cssText = `
-        width: 70px;
-        height: 40px;
+        width: 85px;
+        height: 45px;
         background-color: #DAA520;
         color: #000;
         border: 2px solid #000;
         font-family: 'Press Start 2P', monospace;
-        font-size: 7px;
+        font-size: 8px;
         font-weight: bold;
         text-align: center;
         line-height: 1.1;
-        box-shadow: 2px 2px 0 #8B6914;
-        border-radius: 4px;
+        box-shadow: 3px 3px 0 #8B6914;
+        border-radius: 6px;
         cursor: pointer;
         touch-action: manipulation;
         -webkit-tap-highlight-color: transparent;
     `;
     
-    // Push/Pull button
+    // Push/Pull button - increased size
     const pushButton = document.createElement('button');
     pushButton.id = 'push-btn';
     pushButton.innerHTML = 'PUSH<br>PULL';
     pushButton.style.cssText = `
-        width: 70px;
-        height: 40px;
+        width: 85px;
+        height: 45px;
         background-color: #DAA520;
         color: #000;
         border: 2px solid #000;
         font-family: 'Press Start 2P', monospace;
-        font-size: 7px;
+        font-size: 8px;
         font-weight: bold;
         text-align: center;
         line-height: 1.1;
-        box-shadow: 2px 2px 0 #8B6914;
-        border-radius: 4px;
+        box-shadow: 3px 3px 0 #8B6914;
+        border-radius: 6px;
         cursor: pointer;
         touch-action: manipulation;
         -webkit-tap-highlight-color: transparent;
     `;
     
-    // Directional pad (right side)
+    // Directional pad (right side) - much more spacing
     const dPad = document.createElement('div');
     dPad.style.cssText = `
         position: relative;
-        width: 100px;
+        width: 140px;
         height: 100px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
     `;
     
-    // Left arrow
+    // Left arrow - increased size and better positioning
     const leftBtn = document.createElement('button');
     leftBtn.id = 'left-btn';
     leftBtn.innerHTML = '◀';
     leftBtn.style.cssText = `
-        position: absolute;
-        left: 0;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 35px;
-        height: 35px;
+        width: 50px;
+        height: 50px;
         background-color: #DAA520;
         color: #000;
         border: 2px solid #000;
         font-family: 'Press Start 2P', monospace;
-        font-size: 14px;
+        font-size: 18px;
         font-weight: bold;
         text-align: center;
-        box-shadow: 2px 2px 0 #8B6914;
-        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 3px 3px 0 #8B6914;
+        border-radius: 6px;
         cursor: pointer;
         touch-action: manipulation;
         -webkit-tap-highlight-color: transparent;
     `;
     
-    // Right arrow
+    // Right arrow - increased size and better positioning
     const rightBtn = document.createElement('button');
     rightBtn.id = 'right-btn';
     rightBtn.innerHTML = '▶';
     rightBtn.style.cssText = `
-        position: absolute;
-        right: 0;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 35px;
-        height: 35px;
+        width: 50px;
+        height: 50px;
         background-color: #DAA520;
         color: #000;
         border: 2px solid #000;
         font-family: 'Press Start 2P', monospace;
-        font-size: 14px;
+        font-size: 18px;
         font-weight: bold;
         text-align: center;
-        box-shadow: 2px 2px 0 #8B6914;
-        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 3px 3px 0 #8B6914;
+        border-radius: 6px;
         cursor: pointer;
         touch-action: manipulation;
         -webkit-tap-highlight-color: transparent;
@@ -644,7 +646,7 @@ function setupMobileTouchEvents() {
         button.addEventListener('touchstart', (e) => {
             e.preventDefault();
             button.style.backgroundColor = '#FFD700';
-            button.style.transform = 'translate(1px, 1px)';
+            button.style.transform = 'translate(2px, 2px)';
             button.style.boxShadow = '1px 1px 0 #8B6914';
         });
         
@@ -652,7 +654,7 @@ function setupMobileTouchEvents() {
             e.preventDefault();
             button.style.backgroundColor = '#DAA520';
             button.style.transform = 'translate(0, 0)';
-            button.style.boxShadow = '2px 2px 0 #8B6914';
+            button.style.boxShadow = '3px 3px 0 #8B6914';
         });
     }
     
