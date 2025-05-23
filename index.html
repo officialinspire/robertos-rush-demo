@@ -3,16 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Roberto's Rush</title>
+    
+    <!-- Basic SEO Meta Tags -->
+    <title>Roberto's Rush - Mortician on Duty | Play Now!</title>
+    <meta name="description" content="Help Roberto during a busy day at work! Pick up bodies, push gurneys, and survive the mayhem of the morgue in this retro-style arcade game.">
+    <meta name="keywords" content="Roberto's Rush, morgue game, arcade game, retro game, browser game, HTML5 game, javascript game, chaos game, teaminspire, inspire, fredericksburg, software, kaboom.js, virginia, coates transportation service, death, undertaker">
+    <meta name="author" content="INSPIRE STUDIOS">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph Meta Tags for Social Media -->
+    <meta property="og:title" content="Roberto's Rush - Mortician on Duty">
+    <meta property="og:description" content="Help Roberto during a busy day at work! Pick up bodies, push gurneys, and survive the mayhem of the morgue in this retro-style arcade game.">
+    <meta property="og:image" content="./preview.png">
+    <meta property="og:image:alt" content="Roberto's Rush game preview showing pixel art">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:url" content="https://inspire-robertos-rush-demo.netlify.app/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Roberto's Rush">
+    <meta property="og:locale" content="en_US">
+    
+    <!-- Additional Meta Tags -->
+    <meta name="theme-color" content="#2c3e50">
+    <meta name="msapplication-TileColor" content="#2c3e50">
+    <meta name="application-name" content="Roberto's Rush">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://inspire-robertos-rush-demo.netlify.app/">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="./preview.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./preview.png">
+    <link rel="apple-touch-icon" href="./preview.png">
+    
+    <!-- Preload important resources -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" as="style">
+    <link rel="preload" href="game.js" as="script">
+    <link rel="preload" href="style.css" as="style">
+    
+    <!-- Stylesheets -->
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "VideoGame",
+        "name": "Roberto's Rush",
+        "description": "Help Roberto during a busy day at work! Pick up bodies, push gurneys, and survive the mayhem of the morgue in this retro-style arcade game.",
+        "image": "./preview.png",
+        "genre": "Arcade",
+        "playMode": "SinglePlayer",
+        "gamePlatform": "Web Browser",
+        "operatingSystem": "Any",
+        "applicationCategory": "Game",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "INSPIRE STUDIOS"
+        }
+    }
+    </script>
 </head>
 <body>
     <div class="game-container">
         <!-- Game canvas will be inserted here -->
     </div>
     <div class="controls-info">
-        <p>CONTROLS: Arrow Keys = Move | F = Pick up/drop body | G = Push/pull gurney</p>
+        <p>CONTROLS: Arrow Keys = Move | F = Pick Up/Drop Body | G = Push/Pull Gurney</p>
     </div>
     <script src="game.js"></script>
 </body>
